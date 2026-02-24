@@ -3,30 +3,274 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>My Website</title>
+    <title>Embedded Surveys Demo</title>
+    <meta name="description" content="A lightweight demo page showcasing Lucidya Embedded Surveys." />
 
     <style>
-      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; }
-      header { padding: 24px; border-bottom: 1px solid #eee; }
-      main { padding: 24px; max-width: 960px; margin: 0 auto; }
-      .card { border: 1px solid #eee; border-radius: 12px; padding: 16px; }
-      .hint { color: #666; font-size: 14px; }
+      :root{
+        --bg: #0b1220;
+        --card: rgba(255,255,255,.06);
+        --card2: rgba(255,255,255,.08);
+        --text: #e9eefc;
+        --muted: rgba(233,238,252,.72);
+        --line: rgba(255,255,255,.12);
+        --accent: #7aa7ff;
+        --accent2:#8bffce;
+        --shadow: 0 18px 60px rgba(0,0,0,.35);
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        color:var(--text);
+        background:
+          radial-gradient(900px 500px at 15% 10%, rgba(122,167,255,.25), transparent 55%),
+          radial-gradient(700px 450px at 90% 20%, rgba(139,255,206,.18), transparent 55%),
+          linear-gradient(180deg, #070b14, var(--bg));
+        min-height:100vh;
+      }
+      a{color:var(--accent); text-decoration:none}
+      a:hover{text-decoration:underline}
+      .wrap{max-width:1100px; margin:0 auto; padding:32px 20px 60px;}
+      .topbar{
+        display:flex; align-items:center; justify-content:space-between;
+        gap:16px; padding:14px 16px; border:1px solid var(--line);
+        background:rgba(255,255,255,.03); border-radius:14px;
+        backdrop-filter: blur(10px);
+      }
+      .brand{display:flex; align-items:center; gap:12px;}
+      .logo{
+        width:36px; height:36px; border-radius:12px;
+        background: linear-gradient(135deg, rgba(122,167,255,.9), rgba(139,255,206,.8));
+        box-shadow: 0 8px 30px rgba(122,167,255,.22);
+      }
+      .brand h1{font-size:16px; margin:0; letter-spacing:.2px}
+      .pill{
+        font-size:12px; color:var(--muted);
+        border:1px solid var(--line); padding:6px 10px; border-radius:999px;
+        background:rgba(255,255,255,.03);
+      }
+      .hero{
+        margin:28px 0 18px;
+        display:grid;
+        grid-template-columns: 1.3fr .7fr;
+        gap:18px;
+      }
+      @media (max-width: 900px){ .hero{grid-template-columns:1fr} }
+      .card{
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px;
+        box-shadow: var(--shadow);
+      }
+      .title{
+        font-size:34px; margin:8px 0 6px; line-height:1.05;
+        letter-spacing:-.6px;
+      }
+      .subtitle{margin:0; color:var(--muted); font-size:15px; line-height:1.6}
+      .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+      button{
+        cursor:pointer; border:1px solid var(--line); color:var(--text);
+        background: rgba(255,255,255,.04);
+        border-radius: 12px; padding:10px 12px; font-weight:600;
+      }
+      button.primary{
+        background: linear-gradient(135deg, rgba(122,167,255,.35), rgba(139,255,206,.18));
+        border-color: rgba(122,167,255,.35);
+      }
+      button:hover{transform: translateY(-1px)}
+      .grid{
+        display:grid; grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px; margin-top:14px;
+      }
+      @media (max-width: 900px){ .grid{grid-template-columns:1fr} }
+      .mini{
+        padding:14px;
+        border-radius: 16px;
+        border:1px solid var(--line);
+        background: var(--card2);
+      }
+      .mini h3{margin:0 0 6px; font-size:14px}
+      .mini p{margin:0; font-size:13px; color:var(--muted); line-height:1.6}
+      .section{
+        margin-top:18px;
+        display:grid; grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 900px){ .section{grid-template-columns:1fr} }
+      .faq details{
+        border:1px solid var(--line);
+        background: rgba(255,255,255,.03);
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-bottom:10px;
+      }
+      .faq summary{cursor:pointer; font-weight:700}
+      .faq p{color:var(--muted); margin:10px 0 0; line-height:1.6}
+      footer{
+        margin-top:22px;
+        color:var(--muted);
+        font-size:12px;
+        display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+        opacity:.95;
+      }
+      .hint{
+        font-size:12px; color:var(--muted);
+        border-top:1px dashed rgba(255,255,255,.16);
+        padding-top:10px; margin-top:10px;
+      }
+      /* Optional: a placeholder area you can keep even if the embed renders elsewhere */
+      .embed-area{
+        min-height: 140px;
+        border:1px dashed rgba(255,255,255,.22);
+        border-radius:16px;
+        padding:14px;
+        background: rgba(0,0,0,.12);
+      }
+      .embed-area strong{display:block; margin-bottom:6px}
     </style>
   </head>
 
   <body>
-    <header>
-      <h1 style="margin:0;">Embedded Survey</h1>
-      <p class="hint" style="margin:8px 0 0;">This page exists only to host the embedded survey script.</p>
-    </header>
+    <div class="wrap">
 
-    <main>
-      <div class="card">
-        <p style="margin:0;">
-          If your embed renders automatically, it should appear on this page once the script loads.
-        </p>
+      <div class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1>Embedded Surveys — Demo Page</h1>
+            <div class="pill">GitHub Pages • Single file • No backend</div>
+          </div>
+        </div>
+        <div class="pill" id="statusPill">Status: loading…</div>
       </div>
-    </main>
+
+      <div class="hero">
+        <div class="card">
+          <div class="pill" style="display:inline-block;">For leadership demo</div>
+          <h2 class="title">A simple, clean landing page to showcase the embedded survey experience.</h2>
+          <p class="subtitle">
+            This page exists to demonstrate how an embedded survey can run inside any website with a single script snippet.
+            Use it as a reference implementation for customers and internal stakeholders.
+          </p>
+
+          <div class="btns">
+            <button class="primary" onclick="scrollToDemo()">View survey demo</button>
+            <button onclick="copyUrl()">Copy page link</button>
+            <button onclick="toggleNotes()">Toggle demo notes</button>
+          </div>
+
+          <div class="grid">
+            <div class="mini">
+              <h3>Fast to deploy</h3>
+              <p>Static HTML hosted on GitHub Pages. Update instantly via a commit.</p>
+            </div>
+            <div class="mini">
+              <h3>Secure & lightweight</h3>
+              <p>No credentials on the page. Only the official embed script is loaded.</p>
+            </div>
+            <div class="mini">
+              <h3>Works anywhere</h3>
+              <p>Same approach can be added to any site builder: Webflow, WordPress, custom apps, etc.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="notesCard">
+          <h3 style="margin:0 0 10px;">Demo checklist</h3>
+          <div class="mini" style="margin-bottom:10px;">
+            <h3>1) Open the page</h3>
+            <p>Confirm it loads over HTTPS (GitHub Pages does by default).</p>
+          </div>
+          <div class="mini" style="margin-bottom:10px;">
+            <h3>2) Show the embed</h3>
+            <p>The embedded experience should appear once the script loads.</p>
+          </div>
+          <div class="mini">
+            <h3>3) Collect feedback</h3>
+            <p>Use this page to gather leadership input on UX & messaging.</p>
+          </div>
+
+          <p class="hint">
+            Tip: If you want, we can add a “Customer story” section and a small KPI block (e.g., completion rate, drop-off) later.
+          </p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="card" id="demo">
+          <h3 style="margin:0 0 10px;">Survey demo area</h3>
+
+          <div class="embed-area">
+            <strong>Embedded survey will load below</strong>
+            <div class="hint">
+              If the embed renders as a widget/modal, you may not see content inside this box — that’s okay.
+              This section is here so the page never looks empty.
+            </div>
+          </div>
+
+          <div class="hint">
+            If you want the demo to feel more “real”, we can add a short “pretend product page” (pricing, features, testimonials)
+            so the embedded survey feels contextual.
+          </div>
+        </div>
+
+        <div class="card faq">
+          <h3 style="margin:0 0 10px;">FAQ</h3>
+
+          <details>
+            <summary>Can we brand this page?</summary>
+            <p>Yes — add your colors/logo, and we can also match the survey styling (where supported) to align with branding.</p>
+          </details>
+
+          <details>
+            <summary>Is GitHub Pages good enough for a demo?</summary>
+            <p>For a demo: yes. It’s static, simple, and reliable. For production customer use, you’d typically host on the customer’s site.</p>
+          </details>
+
+          <details>
+            <summary>What if the embed doesn’t appear?</summary>
+            <p>Usually it’s a mismatch in the allowed domain, or the script snippet isn’t included on the served page. GitHub Pages uses HTTPS so it’s rarely the problem.</p>
+          </details>
+        </div>
+      </div>
+
+      <footer>
+        <div>© <span id="year"></span> Lucidya • Embedded Surveys Demo</div>
+        <div>Built as a single static file • Hosted on GitHub Pages</div>
+      </footer>
+    </div>
+
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      function scrollToDemo() {
+        document.getElementById("demo").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      async function copyUrl() {
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          setStatus("Status: link copied ✅");
+          setTimeout(() => setStatus("Status: ready ✅"), 1500);
+        } catch {
+          setStatus("Status: couldn't copy (browser blocked) ⚠️");
+        }
+      }
+
+      function toggleNotes() {
+        const card = document.getElementById("notesCard");
+        card.style.display = (card.style.display === "none") ? "block" : "none";
+      }
+
+      function setStatus(text) {
+        document.getElementById("statusPill").textContent = text;
+      }
+
+      // Best-effort: mark as ready after load (embed may still load async)
+      window.addEventListener("load", () => setStatus("Status: ready ✅"));
+    </script>
 
     <!-- Lucidya Survey Embed (paste exactly as provided) -->
     <script src="https://survey.lucidya.com/bundle.js" luc-data-id="aHR0cHM6Ly9tb2FsaWx1Y2lkeWEuZ2l0aHViLmlvfDM4MDY=" defer></script>
